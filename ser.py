@@ -1,4 +1,6 @@
 import websocket
+import redis
+red=redis.Redis(host='127.0.0.1',port=6379,db='2')
 try:
     import thread
 except ImportError:
@@ -15,9 +17,16 @@ def on_close(ws):
     print("### closed ###")
 
 def on_open(ws):
-	while True:       
-            ws.send("admin %d" % 11111)
-            time.sleep(1)
+        i=1
+        while True:
+            msg=red.rpop('msg')
+            #print(msg,type(msg))
+            if msg:
+                print('have msg..........')
+                ws.send("admin %s" % msg.decode('utf-8'))
+            else:
+                pass
+            #t222ime.sleep(1)
 
 
 if __name__ == "__main__":

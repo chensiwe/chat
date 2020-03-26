@@ -28,6 +28,7 @@ def get_headers(data):
 
 def parse_payload(payload):
     payload_len = payload[1] & 127
+    print('len...',payload_len)
     if payload_len == 126:
         extend_payload_len = payload[2:4]
         mask = payload[4:8]
@@ -67,6 +68,7 @@ def send_msg(conn, msg_bytes):
     msg = first_byte + msg_bytes
     try:
         conn.sendall(msg)
+        
     except Exception as e:
         user.remove(conn)
     return True
@@ -124,7 +126,7 @@ def handler_msg(conn):
 def server_socket():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sock.bind(("127.0.0.1", 10083))
+    sock.bind(("0.0.0.0", 10083))
     sock.listen(5)
     t = threading.Thread(target=handler_accept(sock))
     t.start()

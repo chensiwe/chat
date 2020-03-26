@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+<link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">	
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+
+
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+
+<div class="jumbotron">
+  <h1>Hello, world!</h1>
+  <p>This is a demo for msg push.The user will receive msg when the administrator send a msg</p>
+
+
+<p>connect status<span class="label label-default" id="status">not connected</span></p>
+
+
+</div>
+
+
+
+<div class="modal fade bs-example-modal-sm id" id='push' tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content" id="msg">
+      
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    var ws=null;
+    function conn(){
+        ws=new WebSocket('ws://192.168.150.129:10083');
+         ws.onopen=function(){
+	    $("#status").attr({'class':'label label-success'});
+            $("#status").text("connected");
+         }
+
+        ws.onmessage=function(evt){
+            console.log("fdsa")
+            
+		
+		
+	
+	$("#msg").text(evt.data);
+		$("#push").modal('show');
+        }
+        ws.onclose=function(){
+            $("#status").text("客户端已断开连接");
+        };
+        ws.onerror=function(evt){
+            $("#msg").text(evt.data);
+
+        };
+    };
+
+
+
+conn();
+</script>
+</body>
+</html>
